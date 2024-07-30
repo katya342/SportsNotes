@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BE9AFD"
+    tools:context=".HomePage">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center">
+
+    <TextView
+        android:id="@+id/welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Добро пожаловать в"
+        android:textColor="@android:color/white"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:layout_marginTop="50dp"
+        />
+
+    <!-- Fitness Log -->
+    <TextView
+        android:id="@+id/f"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Fitness Blog"
+        android:textColor="@android:color/white"
+        android:textSize="60sp"
+        android:textStyle="bold"
+        android:layout_marginTop="5dp" />
+
+    <!-- Текст перед первой кнопкой -->
+    <TextView
+        android:id="@+id/pre_continue_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Прежде чем продолжить"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp" />
+
+    <!-- Текст "зарегистрируйтесь" -->
+    <TextView
+        android:id="@+id/registration_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Зарегистрируйтесь"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:layout_marginTop="70dp" />
+
+    <!-- Кнопка "Регистрация" -->
+    <Button
+        android:id="@+id/reg_button"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:text="Регистрация"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#8754CF"
+        android:layout_marginTop="10dp" />
+
+    <!-- Текст перед второй кнопкой -->
+    <TextView
+        android:id="@+id/pre_continue_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Или войдите в свою учетную запись"
+        android:textColor="@android:color/white"
+        android:textSize="22sp"
+        android:layout_marginTop="50dp" />
+
+    <!-- Кнопка "Вход" -->
+    <Button
+        android:id="@+id/log_button"
+        android:layout_width="230dp"
+        android:layout_height="60dp"
+        android:text="Вход"
+        android:textSize="20sp"
+        android:textColor="@android:color/white"
+        android:backgroundTint="#8754CF"
+        android:layout_marginTop="10dp" />
+
+    <!-- Текст после кнопок -->
+    <TextView
+        android:id="@+id/active_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Ведите активный образ жизни"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="120dp" />
+
+    <TextView
+        android:id="@+id/active_text2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="с учетом каждого шага!"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
+        android:layout_marginTop="5dp" />
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
