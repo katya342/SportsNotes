@@ -18,7 +18,7 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
     private Context context;
     private static final String DATABASE_NAME = "sportsnotes.db";
-    private static final int DATABASE_VERSION = 9;
+    private static final int DATABASE_VERSION = 11;
 
     // Таблица users
     public static final String TABLE_USERS = "users";
@@ -29,6 +29,7 @@ public class Database extends SQLiteOpenHelper {
     public static final String COLUMN_SPORT_TYPE = "sport_type"; // Новое поле
     public static final String COLUMN_DAYS_PER_WEEK = "days_per_week"; // Новое поле
     public static final String COLUMN_IMAGE_PATH = "image_path";
+
     // Таблица workouts
     public static final String TABLE_WORKOUTS = "workouts";
     public static final String COLUMN_USER_ID = "user_id";
@@ -45,6 +46,31 @@ public class Database extends SQLiteOpenHelper {
     public static final String COLUMN_RECOMMENDATION_ID = "id";
     public static final String COLUMN_RECOMMENDATION_TEXT = "text";
 
+    // Таблица profile_data
+    public static final String TABLE_PROFILE_DATA = "profile_data";
+    public static final String COLUMN_PROFILE_ID = "profile_id";
+    public static final String COLUMN_TRAINING_COUNT = "training_count";
+    public static final String COLUMN_TRAINING_TIME = "training_time";
+    public static final String COLUMN_BREAKFAST_CALORIES = "breakfast_calories";
+    public static final String COLUMN_LUNCH_CALORIES = "lunch_calories";
+    public static final String COLUMN_DINNER_CALORIES = "dinner_calories";
+    public static final String COLUMN_WEIGHT = "weight";
+    public static final String COLUMN_DATE = "date";
+    public static final String COLUMN_IMAGE = "image";
+
+    private static final String SQL_CREATE_PROFILE_DATA_TABLE =
+            "CREATE TABLE " + TABLE_PROFILE_DATA + " (" +
+                    COLUMN_PROFILE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_TRAINING_COUNT + " INTEGER, " +
+                    COLUMN_TRAINING_TIME + " REAL, " +
+                    COLUMN_BREAKFAST_CALORIES + " REAL, " +
+                    COLUMN_LUNCH_CALORIES + " REAL, " +
+                    COLUMN_DINNER_CALORIES + " REAL, " +
+                    COLUMN_WEIGHT + " REAL, " +
+                    COLUMN_DATE + " TEXT, " +
+                    COLUMN_IMAGE + " BLOB" +
+                    ");";
+
     private static final String SQL_CREATE_USERS_TABLE =
             "CREATE TABLE " + TABLE_USERS + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -56,8 +82,6 @@ public class Database extends SQLiteOpenHelper {
                     COLUMN_IMAGE_PATH + " TEXT" +
                     ");";
 
-
-    // Запрос на создание таблицы workouts
     private static final String SQL_CREATE_WORKOUTS_TABLE =
             "CREATE TABLE " + TABLE_WORKOUTS + " (" +
                     COLUMN_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -72,7 +96,6 @@ public class Database extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + "(" + COLUMN_ID + ")" +
                     ");";
 
-    // Запрос на создание таблицы recommendations
     private static final String SQL_CREATE_RECOMMENDATIONS_TABLE =
             "CREATE TABLE " + TABLE_RECOMMENDATIONS + " (" +
                     COLUMN_RECOMMENDATION_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
@@ -89,7 +112,7 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_USERS_TABLE);
         db.execSQL(SQL_CREATE_WORKOUTS_TABLE);
         db.execSQL(SQL_CREATE_RECOMMENDATIONS_TABLE);
-
+        db.execSQL(SQL_CREATE_PROFILE_DATA_TABLE);
         // Вставка рекомендаций в таблицу
         insertRecommendations(db);
     }
@@ -99,7 +122,23 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USERS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKOUTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECOMMENDATIONS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFILE_DATA);
         onCreate(db);
+    }
+
+    // Метод для вставки данных профиля
+    public long insertProfileData(int trainingCount, double trainingTime, double breakfastCalories, double lunchCalories, double dinnerCalories, double weight, String date, byte[] image) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_TRAINING_COUNT, trainingCount);
+        values.put(COLUMN_TRAINING_TIME, trainingTime);
+        values.put(COLUMN_BREAKFAST_CALORIES, breakfastCalories);
+        values.put(COLUMN_LUNCH_CALORIES, lunchCalories);
+        values.put(COLUMN_DINNER_CALORIES, dinnerCalories);
+        values.put(COLUMN_WEIGHT, weight);
+        values.put(COLUMN_DATE, date);
+        values.put(COLUMN_IMAGE, image);
+        return db.insert(TABLE_PROFILE_DATA, null, values);
     }
 
     // Метод для вставки рекомендаций в таблицу
@@ -173,6 +212,10 @@ public class Database extends SQLiteOpenHelper {
         return id;
     }
 
+    public Cursor getWorkoutDataForUser(long userId) {
+        SQLiteDatabase db = this.getReadableDatabase();
+        return db.rawQuery("SELECT * FROM workouts WHERE user_id = ?", new String[]{String.valueOf(userId)});
+    }
 
     private void saveUserIdToPreferences(long userId) {
         SharedPreferences sharedPreferences = context.getSharedPreferences("UserPrefs", Context.MODE_PRIVATE);

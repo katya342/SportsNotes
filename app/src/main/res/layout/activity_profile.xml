@@ -249,7 +249,7 @@
                 android:textColor="@android:color/white"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="30dp"
                 android:layout_marginBottom="10dp"/>
 
             <Button
@@ -258,23 +258,23 @@
                 android:layout_height="wrap_content"
                 android:backgroundTint="#8754CF"
                 android:padding="12dp"
-                android:text="Выбрать фото"
+                android:text="Загрузить фото"
                 android:textColor="@android:color/white"
                 android:textSize="18sp"
-                android:layout_marginTop="10dp"
                 android:layout_gravity="center"/>
 
+            <!-- Добавьте кнопку для сохранения данных -->
             <Button
-                android:id="@+id/buttonSavePhoto"
-                android:layout_width="138dp"
-                android:layout_height="55dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
+                android:id="@+id/buttonSave"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:backgroundTint="#8754CF"
                 android:padding="12dp"
                 android:text="Сохранить"
                 android:textColor="@android:color/white"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:layout_gravity="center"/>
+
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
