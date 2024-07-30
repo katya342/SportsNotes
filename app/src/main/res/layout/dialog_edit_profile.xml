@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:padding="16dp"
+    android:background="#BE9AFD"
+    tools:context=".UserAccountActivity">
+
+    <!-- Profile Picture -->
+    <ImageView
+        android:id="@+id/profile_picture_edit"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="16dp"
+        android:contentDescription="Profile Picture"
+        android:scaleType="centerCrop" />
+
+    <!-- Upload Button -->
+    <Button
+        android:id="@+id/upload_picture_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Upload Picture"
+        android:layout_marginBottom="16dp"
+        android:backgroundTint="#8754CF"
+        android:textColor="@android:color/white" />
+
+    <!-- User Name Input -->
+    <EditText
+        android:id="@+id/edit_user_name"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Login"
+        android:layout_marginBottom="16dp" />
+
+    <!-- User Email Input -->
+    <EditText
+        android:id="@+id/edit_user_email"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email"
+        android:layout_marginBottom="16dp" />
+
+    <!-- Save Button -->
+    <Button
+        android:id="@+id/save_changes_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Save Changes"
+        android:backgroundTint="#8754CF"
+        android:textColor="@android:color/white" />
+
+</LinearLayout>

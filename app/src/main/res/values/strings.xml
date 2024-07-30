@@ -1,0 +1,12 @@
+<resources>
+    <string name="app_name">SportsNotes</string>
+    <string-array name="sport_types">
+        <item>Футбол</item>
+        <item>Баскетбол</item>
+        <item>Теннис</item>
+        <item>Бег</item>
+        <item>Плавание</item>
+        <item>Велоспорт</item>
+    </string-array>
+</resources>
+

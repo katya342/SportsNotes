@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#BE9AFD"
+    tools:context=".MyWorkout">
+
+    <GridLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:id="@+id/gridLayout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:columnCount="2"
+        android:rowCount="9"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Мои тренировки"
+            android:textColor="@android:color/white"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:layout_marginTop="30dp"
+            android:layout_gravity="center"
+            android:layout_columnSpan="2"/>
+
+        <TextView
+            android:id="@+id/tv_monday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Понедельник"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_marginTop="60dp"
+            android:layout_gravity="center"/>
+
+
+        <EditText
+            android:id="@+id/et_monday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_marginTop="60dp"
+            android:layout_columnWeight="1"/>
+
+
+        <TextView
+            android:id="@+id/tv_tuesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Вторник"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/et_tuesday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"/>
+
+        <TextView
+            android:id="@+id/tv_wednesday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Среда"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/et_wednesday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"/>
+
+        <TextView
+            android:id="@+id/tv_thursday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Четверг"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/et_thursday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"/>
+
+        <TextView
+            android:id="@+id/tv_friday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Пятница"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/et_friday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"/>
+
+        <TextView
+            android:id="@+id/tv_saturday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Суббота"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/et_saturday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"/>
+
+        <TextView
+            android:id="@+id/tv_sunday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Воскресенье"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:layout_margin="8dp"
+            android:layout_gravity="center"/>
+
+        <EditText
+            android:id="@+id/et_sunday"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:hint="Запись"
+            android:textColor="@android:color/white"
+            android:backgroundTint="@android:color/white"
+            android:inputType="textMultiLine"
+            android:layout_margin="8dp"
+            android:layout_columnWeight="1"/>
+
+        <Button
+            android:id="@+id/btn_save"
+            android:layout_width="169dp"
+            android:layout_height="wrap_content"
+            android:layout_row="8"
+            android:layout_column="0"
+            android:layout_columnSpan="2"
+            android:layout_gravity="center"
+            android:layout_marginTop="16dp"
+            android:backgroundTint="#8754CF"
+            android:text="Сохранить" />
+
+    </GridLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
