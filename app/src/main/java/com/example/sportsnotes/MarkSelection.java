@@ -67,6 +67,7 @@ public class MarkSelection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_mark_selection);
+        dbHelper = new Database(this);
 // Запуск таймера для показа уведомления через 10 секунд
         new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
             @Override
@@ -193,6 +194,7 @@ public class MarkSelection extends AppCompatActivity {
                     String dietType = dietTypeSpinner.getSelectedItem().toString().toLowerCase();
                     String goal = goalSpinner.getSelectedItem().toString().toLowerCase();
                     double recommendedCalories = calculateRecommendedCalories(weight, height, age, activityLevel, dietType, goal);
+
                     dbHelper.saveUserDetails(userId, weight, height, age, activityLevel, dietType, goal, recommendedCalories);
 
                 })
