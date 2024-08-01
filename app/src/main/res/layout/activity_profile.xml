@@ -241,40 +241,7 @@
                     android:padding="12dp"/>
             </LinearLayout>
 
-            <!-- Секция загрузки фото -->
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Загрузка фото"
-                android:textColor="@android:color/white"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="20dp"
-                android:layout_marginBottom="10dp"/>
 
-            <Button
-                android:id="@+id/buttonUploadPhoto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:backgroundTint="#8754CF"
-                android:padding="12dp"
-                android:text="Выбрать фото"
-                android:textColor="@android:color/white"
-                android:textSize="18sp"
-                android:layout_marginTop="10dp"
-                android:layout_gravity="center"/>
-
-            <Button
-                android:id="@+id/buttonSavePhoto"
-                android:layout_width="138dp"
-                android:layout_height="55dp"
-                android:layout_gravity="center"
-                android:layout_marginTop="10dp"
-                android:backgroundTint="#8754CF"
-                android:padding="12dp"
-                android:text="Сохранить"
-                android:textColor="@android:color/white"
-                android:textSize="18sp" />
         </LinearLayout>
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
