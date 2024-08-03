@@ -8,5 +8,21 @@
         <item>Плавание</item>
         <item>Велоспорт</item>
     </string-array>
+    <string-array name="activity_level_array">
+        <item>Low</item>
+        <item>Medium</item>
+        <item>High</item>
+    </string-array>
+    <string-array name="diet_type_array">
+        <item>Vegetarian</item>
+        <item>Vegan</item>
+        <item>Keto</item>
+    </string-array>
+    <string-array name="goal_array">
+        <item>Weight Loss</item>
+        <item>Muscle Gain</item>
+        <item>Maintenance</item>
+    </string-array>
+
 </resources>
 

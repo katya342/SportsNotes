@@ -5,12 +5,19 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -60,7 +67,14 @@ public class MarkSelection extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_mark_selection);
-
+        dbHelper = new Database(this);
+// Запуск таймера для показа уведомления через 10 секунд
+        new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                showUserInputDialog();
+            }
+        }, 10000);
 //        SharedPreferences sharedPreferences = getSharedPreferences("UserPrefs", MODE_PRIVATE);
 //        int userId = (int) sharedPreferences.getLong("user_id", -1);
 //        dbHelper = new Database(this);
@@ -142,4 +156,102 @@ public class MarkSelection extends AppCompatActivity {
             }
         });
     }
+    private void showUserInputDialog() {
+        LayoutInflater inflater = LayoutInflater.from(this);
+        View dialogView = inflater.inflate(R.layout.dialog_user_input, null);
+
+        Spinner activityLevelSpinner = dialogView.findViewById(R.id.spActivityLevel);
+        ArrayAdapter<CharSequence> activityLevelAdapter = ArrayAdapter.createFromResource(this,
+                R.array.activity_level_array, android.R.layout.simple_spinner_item);
+        activityLevelAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        activityLevelSpinner.setAdapter(activityLevelAdapter);
+
+        Spinner dietTypeSpinner = dialogView.findViewById(R.id.spDietType);
+        ArrayAdapter<CharSequence> dietTypeAdapter = ArrayAdapter.createFromResource(this,
+                R.array.diet_type_array, android.R.layout.simple_spinner_item);
+        dietTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        dietTypeSpinner.setAdapter(dietTypeAdapter);
+
+        Spinner goalSpinner = dialogView.findViewById(R.id.spGoal);
+        ArrayAdapter<CharSequence> goalAdapter = ArrayAdapter.createFromResource(this,
+                R.array.goal_array, android.R.layout.simple_spinner_item);
+        goalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        goalSpinner.setAdapter(goalAdapter);
+        new AlertDialog.Builder(this)
+                .setTitle("Введите свои данные")
+                .setView(dialogView)
+                .setPositiveButton("Сохранить", (dialog, which) -> {
+                    EditText userIdEditText = dialogView.findViewById(R.id.etUserId);
+                    EditText weightEditText = dialogView.findViewById(R.id.etWeight);
+                    EditText heightEditText = dialogView.findViewById(R.id.etHeight);
+                    EditText ageEditText = dialogView.findViewById(R.id.etAge);
+
+                    int userId = Integer.parseInt(userIdEditText.getText().toString());
+                    double weight = Double.parseDouble(weightEditText.getText().toString());
+                    double height = Double.parseDouble(heightEditText.getText().toString());
+                    int age = Integer.parseInt(ageEditText.getText().toString());
+                    String activityLevel = activityLevelSpinner.getSelectedItem().toString().toLowerCase();
+                    String dietType = dietTypeSpinner.getSelectedItem().toString().toLowerCase();
+                    String goal = goalSpinner.getSelectedItem().toString().toLowerCase();
+                    double recommendedCalories = calculateRecommendedCalories(weight, height, age, activityLevel, dietType, goal);
+
+                    dbHelper.saveUserDetails(userId, weight, height, age, activityLevel, dietType, goal, recommendedCalories);
+
+                })
+                .setNegativeButton("Отмена", (dialog, which) -> dialog.cancel())
+                .create()
+                .show();
+    }
+    private double calculateRecommendedCalories(double weight, double height, int age, String activityLevel, String dietType, String goal) {
+        // Определение базального уровня метаболизма (BMR) с использованием формулы Харриса-Бенедикта
+        // Формула для мужчин: BMR = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age)
+        // Формула для женщин: BMR = 447.593 + (9.247 * weight) + (3.098 * height) - (4.330 * age)
+        // Для примера предположим, что пол определен отдельно, и мы используем формулу для мужчин.
+
+        double bmr;
+        // Вы можете заменить эту логику на учет пола и соответствующую формулу
+        bmr = 88.362 + (13.397 * weight) + (4.799 * height) - (5.677 * age);
+
+        // Определение коэффициента активности
+        double activityFactor;
+        switch (activityLevel.toLowerCase()) {
+            case "низкий":
+                activityFactor = 1.2;
+                break;
+            case "средний":
+                activityFactor = 1.55;
+                break;
+            case "высокий":
+                activityFactor = 1.9;
+                break;
+            default:
+                activityFactor = 1.2; // Значение по умолчанию
+                break;
+        }
+
+        // Расчет общего количества калорий с учетом уровня активности
+        double totalCalories = bmr * activityFactor;
+
+        // Корректировка калорий в зависимости от цели
+        switch (goal.toLowerCase()) {
+            case "потеря веса":
+                totalCalories -= 500; // Уменьшение на 500 калорий для потери веса
+                break;
+            case "набор массы":
+                totalCalories += 500; // Увеличение на 500 калорий для набора массы
+                break;
+            case "поддержание веса":
+                // Нет изменений
+                break;
+            default:
+                break;
+        }
+
+        // Введение дополнительных корректировок в зависимости от типа диеты
+        // Например, можно изменить общее количество калорий в зависимости от диеты
+        // Здесь для простоты нет изменений
+
+        return totalCalories;
+    }
+
 }
