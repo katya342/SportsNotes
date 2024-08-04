@@ -18,7 +18,7 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
     private Context context;
     private static final String DATABASE_NAME = "sportsnotes.db";
-    private static final int DATABASE_VERSION = 10;
+    private static final int DATABASE_VERSION = 13;
 
     // Таблица users
     public static final String TABLE_USERS = "users";
@@ -46,8 +46,8 @@ public class Database extends SQLiteOpenHelper {
     public static final String TABLE_RECOMMENDATIONS = "recommendations";
     public static final String COLUMN_RECOMMENDATION_ID = "id";
     public static final String COLUMN_RECOMMENDATION_TEXT = "text";
-    // Таблица user details
 
+    // Таблица user details
     public static final String TABLE_USER_DETAILS = "user_details";
     public static final String COLUMN_USER_ID = "user_id"; // Идентификатор пользователя
     public static final String COLUMN_WEIGHT = "weight";
@@ -57,6 +57,26 @@ public class Database extends SQLiteOpenHelper {
     public static final String COLUMN_DIET_TYPE = "diet_type";
     public static final String COLUMN_GOAL = "goal";
     public static final String COLUMN_RECOMMENDED_CALORIES = "recommended_calories";
+
+    // Таблица gyms
+    public static final String TABLE_GYMS = "gyms";
+    public static final String COLUMN_GYM_ID = "gym_id";
+    public static final String COLUMN_GYM_NAME = "gym_name";
+    public static final String COLUMN_GYM_DESCRIPTION = "gym_description";
+    public static final String COLUMN_GYM_ADDRESS = "gym_address";
+    public static final String COLUMN_GYM_CONTACT = "gym_contact";
+    public static final String COLUMN_GYM_WEBSITE = "gym_website";
+
+    // Запрос на создание таблицы gyms
+    private static final String SQL_CREATE_GYMS_TABLE =
+            "CREATE TABLE " + TABLE_GYMS + " (" +
+                    COLUMN_GYM_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_GYM_NAME + " TEXT, " +
+                    COLUMN_GYM_DESCRIPTION + " TEXT, " +
+                    COLUMN_GYM_ADDRESS + " TEXT, " +
+                    COLUMN_GYM_CONTACT + " TEXT, " +
+                    COLUMN_GYM_WEBSITE + " TEXT" +
+                    ");";
 
     private static final String SQL_CREATE_USERS_TABLE =
             "CREATE TABLE " + TABLE_USERS + " (" +
@@ -106,6 +126,7 @@ public class Database extends SQLiteOpenHelper {
                     ");";
 
 
+
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
         this.context = context; // Инициализация контекста
@@ -117,9 +138,15 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_WORKOUTS_TABLE);
         db.execSQL(SQL_CREATE_RECOMMENDATIONS_TABLE);
         db.execSQL(SQL_CREATE_USER_DETAILS_TABLE);
+        db.execSQL(SQL_CREATE_GYMS_TABLE);
+
+        // Вставка начальных данных о спортзалах
+//        insertInitialGyms(db);
+
         // Вставка рекомендаций в таблицу
         insertRecommendations(db);
     }
+
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
@@ -127,9 +154,12 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_WORKOUTS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECOMMENDATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_DETAILS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_GYMS);
 
         onCreate(db);
     }
+
+
 
     // Метод для вставки рекомендаций в таблицу
     private void insertRecommendations(SQLiteDatabase db) {
@@ -172,6 +202,68 @@ public class Database extends SQLiteOpenHelper {
             db.insert(TABLE_RECOMMENDATIONS, null, values);
         }
     }
+
+//    private void insertInitialGyms(SQLiteDatabase db) {
+//        // Массив данных о спортзалах
+//        String[][] gyms = {
+//                {
+//                        "Workout Fitness Center",
+//                        "Фитнес-центр \"Workout\" в Алматы предлагает разнообразные тренировки и программы для всех уровней подготовки. Включает залы для групповых занятий, тренажерный зал, зоны для функционального тренинга, а также сауны и массажные кабинеты.",
+//                        "пр. Абая, 42, Алматы, Казахстан",
+//                        "+7 (727) 123-45-67",
+//                        "https://example-workout-fitness-center.com"
+//                },
+//                {
+//                        "Workout Studio",
+//                        "Более специализированный зал, ориентированный на функциональный тренинг, кроссфит и персональные тренировки. В зале есть все необходимое оборудование для высокоинтенсивных тренировок.",
+//                        "ул. Тимирязева, 25, Алматы, Казахстан",
+//                        "+7 (727) 765-43-21",
+//                        "https://example-workout-studio.com"
+//                },
+//                {
+//                        "Workout Gym",
+//                        "Комплексный фитнес-центр с большим выбором тренажеров, кардио-зоной, зоной для силовых тренировок и йоги. Подходит для тренировок любой интенсивности и подготовки.",
+//                        "мкр. Самал-2, 33, Алматы, Казахстан",
+//                        "+7 (727) 987-65-43",
+//                        "https://example-workout-gym.com"
+//                },
+//                {
+//                        "Banzai Fitness Club",
+//                        "Фитнес-клуб \"Banzai\" в Алматы предлагает широкий спектр услуг, включая тренажерный зал, групповые занятия, персональные тренировки, бассейн, сауну и спа. Клуб ориентирован на высокое качество обслуживания и индивидуальный подход к каждому клиенту.",
+//                        "пр. Аль-Фараби, 77, Алматы, Казахстан",
+//                        "+7 (727) 258-36-00",
+//                        "https://example-banzai-fitness-club.com"
+//                },
+//                {
+//                        "Banzai Fitness Club (Толе би)",
+//                        "Фитнес-клуб \"Banzai\" предлагает современное оборудование для тренировок, разнообразные групповые занятия, персональные тренировки, а также дополнительные услуги, такие как сауна и массаж. Клуб ориентирован на создание комфортной и мотивирующей атмосферы для тренировок.",
+//                        "ул. Толе би, 187, Алматы, Казахстан",
+//                        "+7 (727) 233-22-33",
+//                        "https://example-banzai-fitness-club-tole-bi.com"
+//                }
+//        };
+//
+//        // Вставка данных о спортзалах
+//        ContentValues values = new ContentValues();
+//        for (String[] gym : gyms) {
+//            values.put(COLUMN_GYM_NAME, gym[0]);
+//            values.put(COLUMN_GYM_DESCRIPTION, gym[1]);
+//            values.put(COLUMN_GYM_ADDRESS, gym[2]);
+//            values.put(COLUMN_GYM_CONTACT, gym[3]);
+//            values.put(COLUMN_GYM_WEBSITE, gym[4]);
+//            db.insert(TABLE_GYMS, null, values);
+//            values.clear();
+//        }
+//    }
+
+
+    // скрипт спортзалов для бд
+    // INSERT INTO gyms (gym_name, gym_description, gym_address, gym_contact, gym_website) VALUES
+    //('Workout Fitness Center', 'Фитнес-центр "Workout" в Алматы предлагает разнообразные тренировки и программы для всех уровней подготовки. Включает залы для групповых занятий, тренажерный зал, зоны для функционального тренинга, а также сауны и массажные кабинеты.', 'пр. Абая, 42, Алматы, Казахстан', '+7 (727) 123-45-67', 'https://example-workout-fitness-center.com'),
+    //('Workout Studio', 'Более специализированный зал, ориентированный на функциональный тренинг, кроссфит и персональные тренировки. В зале есть все необходимое оборудование для высокоинтенсивных тренировок.', 'ул. Тимирязева, 25, Алматы, Казахстан', '+7 (727) 765-43-21', 'https://example-workout-studio.com'),
+    //('Workout Gym', 'Комплексный фитнес-центр с большим выбором тренажеров, кардио-зоной, зоной для силовых тренировок и йоги. Подходит для тренировок любой интенсивности и подготовки.', 'мкр. Самал-2, 33, Алматы, Казахстан', '+7 (727) 987-65-43', 'https://example-workout-gym.com'),
+    //('Banzai Fitness Club', 'Фитнес-клуб "Banzai" в Алматы предлагает широкий спектр услуг, включая тренажерный зал, групповые занятия, персональные тренировки, бассейн, сауну и спа. Клуб ориентирован на высокое качество обслуживания и индивидуальный подход к каждому клиенту.', 'пр. Аль-Фараби, 77, Алматы, Казахстан', '+7 (727) 258-36-00', 'https://example-banzai-fitness-club.com'),
+    //('Banzai Fitness Club на Толе би', 'Фитнес-клуб "Banzai" на Толе би предлагает современное оборудование для тренировок, разнообразные групповые занятия, персональные тренировки, а также дополнительные услуги, такие как сауна и массаж. Клуб ориентирован на создание комфортной и мотивирующей атмосферы для тренировок.', 'ул. Толе би, 187, Алматы, Казахстан', '+7 (727) 233-22-33', 'https://example-banzai-fitness-club-tole-bi.com');
 
     public void saveUserDetails(int userId, double weight, double height, int age, String activityLevel, String dietType, String goal, double recommendedCalories) {
         SQLiteDatabase db = this.getWritableDatabase();
@@ -353,4 +445,5 @@ public class Database extends SQLiteOpenHelper {
         }
         return recommendations;
     }
+
 }
