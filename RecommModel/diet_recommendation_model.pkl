@@ -1,0 +1,21 @@
+import pickle
+from sklearn.ensemble import RandomForestRegressor
+import pandas as pd
+
+# Допустим, у вас есть подготовленный набор данных для обучения модели
+data = pd.read_csv('user_diet_data.csv')
+
+# Разделение данных на признаки (X) и целевую переменную (y)
+X = data.drop('calories', axis=1)
+y = data['calories']
+
+# Кодирование категориальных переменных
+X = pd.get_dummies(X, columns=['activity_level', 'diet_type', 'goal'])
+
+# Создание и обучение модели
+model = RandomForestRegressor()
+model.fit(X, y)
+
+# Сохранение модели
+with open('diet_recommendation_model.pkl', 'wb') as f:
+    pickle.dump(model, f)

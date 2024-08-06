@@ -1,0 +1,4 @@
+age,weight,height,activity_level,diet_type,goal,calories
+25,70,175,medium,vegetarian,lose_weight,2000
+30,80,180,high,vegan,maintain_weight,2500
+22,60,160,low,omnivore,gain_weight,1800
