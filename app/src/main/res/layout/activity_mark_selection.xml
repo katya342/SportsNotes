@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#BE9AFD"
-    tools:context=".MainActivity">
+    tools:context=".MarkSelection">
 
     <LinearLayout
         android:layout_width="match_parent"

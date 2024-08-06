@@ -21,53 +21,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"/>
 
-    <!-- Название спортзала -->
-    <TextView
-        android:id="@+id/gym_name"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:text="Название спортзала"
-        android:textSize="18sp"
-        android:textColor="@android:color/black"
+    <!-- ScrollView для прокрутки содержимого -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
         app:layout_constraintTop_toBottomOf="@id/header"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent">
 
-    <!-- Изображение спортзала -->
-<!--    <ImageView-->
-<!--        android:id="@+id/gym_image"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="200dp"-->
-<!--        android:scaleType="centerCrop"-->
-<!--        android:src="@drawable/sample_gym_image"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/gym_name"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        android:layout_marginTop="8dp"-->
-<!--        android:layout_marginBottom="8dp"/>-->
-
-    <!-- Адрес спортзала -->
-<!--    <TextView-->
-<!--        android:id="@+id/gym_address"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Адрес спортзала"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/gym_image"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
-
-    <!-- Номер телефона спортзала -->
-<!--    <TextView-->
-<!--        android:id="@+id/gym_phone"-->
-<!--        android:layout_width="0dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Номер телефона спортзала"-->
-<!--        android:textSize="16sp"-->
-<!--        android:textColor="@android:color/black"-->
-<!--        app:layout_constraintTop_toBottomOf="@id/gym_address"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"/>-->
+        <!-- LinearLayout для динамического добавления данных -->
+        <LinearLayout
+            android:id="@+id/gymsContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp"/>
+    </ScrollView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
