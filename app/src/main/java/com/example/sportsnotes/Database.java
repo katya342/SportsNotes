@@ -46,16 +46,30 @@ public class Database extends SQLiteOpenHelper {
     public static final String TABLE_RECOMMENDATIONS = "recommendations";
     public static final String COLUMN_RECOMMENDATION_ID = "id";
     public static final String COLUMN_RECOMMENDATION_TEXT = "text";
+
     // Таблица user details
     public static final String TABLE_USER_DETAILS = "user_details";
     public static final String COLUMN_USER_ID = "user_id"; // Идентификатор пользователя
-    public static final String COLUMN_WEIGHT = "weight";
+    //public static final String COLUMN_WEIGHT = "weight";
     public static final String COLUMN_HEIGHT = "height";
     public static final String COLUMN_AGE = "age";
     public static final String COLUMN_ACTIVITY_LEVEL = "activity_level";
     public static final String COLUMN_DIET_TYPE = "diet_type";
     public static final String COLUMN_GOAL = "goal";
     public static final String COLUMN_RECOMMENDED_CALORIES = "recommended_calories";
+
+    // Имя таблицы и столбцов
+    private static final String TABLE_NAME = "profile_data";
+    private static final String COLUMN_PROFILE_ID = "profile_id";
+    private static final String COLUMN_TRAINING_COUNT = "training_count";
+    private static final String COLUMN_TRAINING_TIME = "training_time";
+    private static final String COLUMN_BREAKFAST_CALORIES = "breakfast_calories";
+    private static final String COLUMN_LUNCH_CALORIES = "lunch_calories";
+    private static final String COLUMN_DINNER_CALORIES = "dinner_calories";
+    private static final String COLUMN_WEIGHT = "weight";
+    private static final String COLUMN_DATE = "date";
+    private static final String COLUMN_IMAGE = "image";
+
 
     // Таблица gyms
     public static final String TABLE_GYMS = "gyms";
@@ -152,8 +166,56 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECOMMENDATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GYMS);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
 
         onCreate(db);
+    }
+
+    // Метод для вставки данных в таблицу
+    public boolean insertUserProfile(int trainingCount, double trainingTime, double breakfastCalories,
+                                     double lunchCalories, double dinnerCalories, double weight,
+                                     String date, byte[] image) {
+        SQLiteDatabase db = this.getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(COLUMN_TRAINING_COUNT, trainingCount);
+        contentValues.put(COLUMN_TRAINING_TIME, trainingTime);
+        contentValues.put(COLUMN_BREAKFAST_CALORIES, breakfastCalories);
+        contentValues.put(COLUMN_LUNCH_CALORIES, lunchCalories);
+        contentValues.put(COLUMN_DINNER_CALORIES, dinnerCalories);
+        contentValues.put(COLUMN_WEIGHT, weight);
+        contentValues.put(COLUMN_DATE, date);
+        contentValues.put(COLUMN_IMAGE, image);
+
+        long result = db.insert(TABLE_NAME, null, contentValues);
+        db.close();
+
+        return result != -1;
+    }
+
+    // Метод для получения всех профилей (или данных о тренировках)
+    public ArrayList<String> getAllProfiles() {
+        ArrayList<String> profiles = new ArrayList<>();
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + TABLE_NAME;
+        Cursor cursor = db.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            do {
+                String profile = " Количество тренировок: " + cursor.getInt(cursor.getColumnIndex(COLUMN_TRAINING_COUNT)) +
+                        ", Время тренировки: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_TRAINING_TIME)) +
+                        ", Завтрак (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_BREAKFAST_CALORIES)) +
+                        ", Обед (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_LUNCH_CALORIES)) +
+                        ", Ужин (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_DINNER_CALORIES)) +
+                        ", Вес: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_WEIGHT)) +
+                        ", Дата: " + cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+//                        ", Image: " + cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE));
+                profiles.add(profile);
+            } while (cursor.moveToNext());
+        }
+
+        cursor.close();
+        db.close();
+        return profiles;
     }
 
     // Метод для вставки рекомендаций в таблицу
@@ -375,19 +437,33 @@ public class Database extends SQLiteOpenHelper {
         db.close();
     }
     public void updateUserViaImage(int userId, String login, String email, String imagePath) {
-        SQLiteDatabase db = this.getWritableDatabase();
-        ContentValues values = new ContentValues();
-        values.put(COLUMN_LOGIN, login);
-        values.put(COLUMN_EMAIL, email);
-        if (imagePath != null) {
-            values.put(COLUMN_IMAGE_PATH, imagePath);
+        SQLiteDatabase db = null;
+        try {
+            db = this.getWritableDatabase();
+
+            // Проверяем, существует ли запись с таким userId
+            Cursor cursor = db.query(TABLE_USERS, new String[]{COLUMN_ID}, COLUMN_ID + " = ?", new String[]{String.valueOf(userId)}, null, null, null);
+            if (cursor.moveToFirst()) {
+                ContentValues values = new ContentValues();
+                values.put(COLUMN_LOGIN, login);
+                values.put(COLUMN_EMAIL, email);
+                values.put(COLUMN_IMAGE_PATH, imagePath);
+
+                // Обновляем запись в базе данных
+                db.update(TABLE_USERS, values, COLUMN_ID + " = ?", new String[]{String.valueOf(userId)});
+            } else {
+                Log.e("Database", "User with id " + userId + " does not exist.");
+            }
+            cursor.close();
+        } catch (Exception e) {
+            Log.e("Database", "Error updating user details", e);
+        } finally {
+            if (db != null) {
+                db.close();
+            }
         }
-
-        String whereClause = COLUMN_ID + " = ?";
-        String[] whereArgs = new String[]{String.valueOf(userId)};
-
-        db.update(TABLE_USERS, values, whereClause, whereArgs);
     }
+
     public long addWorkout(int userId, String mondayNotes, String tuesdayNotes, String wednesdayNotes,
                            String thursdayNotes, String fridayNotes, String saturdayNotes, String sundayNotes) {
         SQLiteDatabase db = this.getWritableDatabase();

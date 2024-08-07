@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#BE9AFD"
     tools:context=".HistoryWorkout">
 
     <ListView
@@ -11,7 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp"
-        android:divider="@android:color/darker_gray"
+        android:textColor="@android:color/white"
         android:dividerHeight="1dp"/>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
