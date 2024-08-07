@@ -192,7 +192,6 @@ public class Database extends SQLiteOpenHelper {
         return result != -1;
     }
 
-    // Метод для получения всех профилей (или данных о тренировках)
     public ArrayList<String> getAllProfiles() {
         ArrayList<String> profiles = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
@@ -201,15 +200,15 @@ public class Database extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-//                String profile = " Количество тренировок: " + cursor.getInt(cursor.getColumnIndex(COLUMN_TRAINING_COUNT)) +
-//                        ", Время тренировки: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_TRAINING_TIME)) +
-//                        ", Завтрак (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_BREAKFAST_CALORIES)) +
-//                        ", Обед (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_LUNCH_CALORIES)) +
-//                        ", Ужин (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_DINNER_CALORIES)) +
-//                        ", Вес: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_WEIGHT)) +
-//                        ", Дата: " + cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
-//                        ", Image: " + cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE));
-                //profiles.add(profile);
+                String profile = " Количество тренировок: " + cursor.getInt(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_COUNT)) +
+                        ", Время тренировки: " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_TRAINING_TIME)) +
+                        ", Завтрак (ккал): " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_BREAKFAST_CALORIES)) +
+                        ", Обед (ккал): " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LUNCH_CALORIES)) +
+                        ", Ужин (ккал): " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_DINNER_CALORIES)) +
+                        ", Вес: " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_WEIGHT)) +
+                        ", Дата: " + cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE));
+//                    ", Изображение: " + cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE));
+                profiles.add(profile);
             } while (cursor.moveToNext());
         }
 
@@ -217,6 +216,7 @@ public class Database extends SQLiteOpenHelper {
         db.close();
         return profiles;
     }
+
 
     // Метод для вставки рекомендаций в таблицу
     private void insertRecommendations(SQLiteDatabase db) {

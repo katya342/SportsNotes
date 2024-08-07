@@ -28,7 +28,6 @@ import java.util.Date;
 import java.util.Locale;
 
 public class Profile extends AppCompatActivity {
-
     private static final int PICK_IMAGE_REQUEST = 1;
 
     private EditText editTextTrainingCount, editTextTrainingTime, editTextBreakfastCalories, editTextLunchCalories, editTextDinnerCalories, editTextWeight, editTextDate;
