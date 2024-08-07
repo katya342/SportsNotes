@@ -201,15 +201,15 @@ public class Database extends SQLiteOpenHelper {
 
         if (cursor.moveToFirst()) {
             do {
-                String profile = " Количество тренировок: " + cursor.getInt(cursor.getColumnIndex(COLUMN_TRAINING_COUNT)) +
-                        ", Время тренировки: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_TRAINING_TIME)) +
-                        ", Завтрак (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_BREAKFAST_CALORIES)) +
-                        ", Обед (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_LUNCH_CALORIES)) +
-                        ", Ужин (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_DINNER_CALORIES)) +
-                        ", Вес: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_WEIGHT)) +
-                        ", Дата: " + cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
+//                String profile = " Количество тренировок: " + cursor.getInt(cursor.getColumnIndex(COLUMN_TRAINING_COUNT)) +
+//                        ", Время тренировки: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_TRAINING_TIME)) +
+//                        ", Завтрак (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_BREAKFAST_CALORIES)) +
+//                        ", Обед (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_LUNCH_CALORIES)) +
+//                        ", Ужин (ккал): " + cursor.getDouble(cursor.getColumnIndex(COLUMN_DINNER_CALORIES)) +
+//                        ", Вес: " + cursor.getDouble(cursor.getColumnIndex(COLUMN_WEIGHT)) +
+//                        ", Дата: " + cursor.getString(cursor.getColumnIndex(COLUMN_DATE));
 //                        ", Image: " + cursor.getString(cursor.getColumnIndex(COLUMN_IMAGE));
-                profiles.add(profile);
+                //profiles.add(profile);
             } while (cursor.moveToNext());
         }
 
