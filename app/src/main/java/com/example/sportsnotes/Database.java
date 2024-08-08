@@ -18,7 +18,7 @@ import java.util.List;
 public class Database extends SQLiteOpenHelper {
     private Context context;
     private static final String DATABASE_NAME = "sportsnotes.db";
-    private static final int DATABASE_VERSION = 13;
+    private static final int DATABASE_VERSION = 16;
 
     // Таблица users
     public static final String TABLE_USERS = "users";
@@ -50,7 +50,7 @@ public class Database extends SQLiteOpenHelper {
     // Таблица user details
     public static final String TABLE_USER_DETAILS = "user_details";
     public static final String COLUMN_USER_ID = "user_id"; // Идентификатор пользователя
-    //public static final String COLUMN_WEIGHT = "weight";
+    public static final String COLUMN_WEIGHT = "weight";
     public static final String COLUMN_HEIGHT = "height";
     public static final String COLUMN_AGE = "age";
     public static final String COLUMN_ACTIVITY_LEVEL = "activity_level";
@@ -58,17 +58,16 @@ public class Database extends SQLiteOpenHelper {
     public static final String COLUMN_GOAL = "goal";
     public static final String COLUMN_RECOMMENDED_CALORIES = "recommended_calories";
 
-    // Имя таблицы и столбцов
-    private static final String TABLE_NAME = "profile_data";
+    // Таблица profile_data
+    private static final String TABLE_PROFILE_DATA = "profile_data";
     private static final String COLUMN_PROFILE_ID = "profile_id";
     private static final String COLUMN_TRAINING_COUNT = "training_count";
     private static final String COLUMN_TRAINING_TIME = "training_time";
     private static final String COLUMN_BREAKFAST_CALORIES = "breakfast_calories";
     private static final String COLUMN_LUNCH_CALORIES = "lunch_calories";
     private static final String COLUMN_DINNER_CALORIES = "dinner_calories";
-    private static final String COLUMN_WEIGHT = "weight";
+    private static final String COLUMN_WEIGHTS = "weights";
     private static final String COLUMN_DATE = "date";
-    private static final String COLUMN_IMAGE = "image";
 
 
     // Таблица gyms
@@ -138,6 +137,18 @@ public class Database extends SQLiteOpenHelper {
                     "FOREIGN KEY (" + COLUMN_USER_ID + ") REFERENCES " + TABLE_USERS + " (" + COLUMN_ID + ") ON DELETE CASCADE" +
                     ");";
 
+    private static final String SQL_CREATE_PROFILE_DATA_TABLE =
+            "CREATE TABLE " + TABLE_PROFILE_DATA + " (" +
+                    COLUMN_PROFILE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
+                    COLUMN_TRAINING_COUNT + " INTEGER NOT NULL, " +
+                    COLUMN_TRAINING_TIME + " REAL NOT NULL, " +
+                    COLUMN_BREAKFAST_CALORIES + " REAL NOT NULL, " +
+                    COLUMN_LUNCH_CALORIES + " REAL NOT NULL, " +
+                    COLUMN_DINNER_CALORIES + " REAL NOT NULL, " +
+                    COLUMN_WEIGHTS + " REAL NOT NULL, " +
+                    COLUMN_DATE + " TEXT NOT NULL" +
+                    ")";
+
 
     public Database(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
@@ -151,12 +162,15 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL(SQL_CREATE_RECOMMENDATIONS_TABLE);
         db.execSQL(SQL_CREATE_USER_DETAILS_TABLE);
         db.execSQL(SQL_CREATE_GYMS_TABLE);
+        db.execSQL(SQL_CREATE_PROFILE_DATA_TABLE);
 
-        // Вставка начальных данных о спортзалах
-//        insertInitialGyms(db);
-
-        // Вставка рекомендаций в таблицу
+//        insertRecommendations(db);
         insertRecommendations(db);
+        insertGyms(db);
+
+//        if (!isTableNotEmpty(db, TABLE_GYMS)) {
+//            insertGyms(db);
+//        }
     }
 
     @Override
@@ -166,15 +180,14 @@ public class Database extends SQLiteOpenHelper {
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_RECOMMENDATIONS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_USER_DETAILS);
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_GYMS);
-        db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + TABLE_PROFILE_DATA);
 
         onCreate(db);
     }
 
-    // Метод для вставки данных в таблицу
     public boolean insertUserProfile(int trainingCount, double trainingTime, double breakfastCalories,
-                                     double lunchCalories, double dinnerCalories, double weight,
-                                     String date, byte[] image) {
+                                     double lunchCalories, double dinnerCalories, double weights,
+                                     String date) {
         SQLiteDatabase db = this.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLUMN_TRAINING_COUNT, trainingCount);
@@ -182,11 +195,10 @@ public class Database extends SQLiteOpenHelper {
         contentValues.put(COLUMN_BREAKFAST_CALORIES, breakfastCalories);
         contentValues.put(COLUMN_LUNCH_CALORIES, lunchCalories);
         contentValues.put(COLUMN_DINNER_CALORIES, dinnerCalories);
-        contentValues.put(COLUMN_WEIGHT, weight);
+        contentValues.put(COLUMN_WEIGHTS, weights);
         contentValues.put(COLUMN_DATE, date);
-        contentValues.put(COLUMN_IMAGE, image);
 
-        long result = db.insert(TABLE_NAME, null, contentValues);
+        long result = db.insert(TABLE_PROFILE_DATA, null, contentValues);
         db.close();
 
         return result != -1;
@@ -195,7 +207,7 @@ public class Database extends SQLiteOpenHelper {
     public ArrayList<String> getAllProfiles() {
         ArrayList<String> profiles = new ArrayList<>();
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + TABLE_NAME;
+        String query = "SELECT * FROM " + TABLE_PROFILE_DATA;
         Cursor cursor = db.rawQuery(query, null);
 
         if (cursor.moveToFirst()) {
@@ -205,9 +217,8 @@ public class Database extends SQLiteOpenHelper {
                         ", Завтрак (ккал): " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_BREAKFAST_CALORIES)) +
                         ", Обед (ккал): " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_LUNCH_CALORIES)) +
                         ", Ужин (ккал): " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_DINNER_CALORIES)) +
-                        ", Вес: " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_WEIGHT)) +
+                        ", Вес: " + cursor.getDouble(cursor.getColumnIndexOrThrow(COLUMN_WEIGHTS)) +
                         ", Дата: " + cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_DATE));
-//                    ", Изображение: " + cursor.getString(cursor.getColumnIndexOrThrow(COLUMN_IMAGE));
                 profiles.add(profile);
             } while (cursor.moveToNext());
         }
@@ -260,67 +271,62 @@ public class Database extends SQLiteOpenHelper {
         }
     }
 
-//    private void insertInitialGyms(SQLiteDatabase db) {
-//        // Массив данных о спортзалах
-//        String[][] gyms = {
-//                {
-//                        "Workout Fitness Center",
-//                        "Фитнес-центр \"Workout\" в Алматы предлагает разнообразные тренировки и программы для всех уровней подготовки. Включает залы для групповых занятий, тренажерный зал, зоны для функционального тренинга, а также сауны и массажные кабинеты.",
-//                        "пр. Абая, 42, Алматы, Казахстан",
-//                        "+7 (727) 123-45-67",
-//                        "https://example-workout-fitness-center.com"
-//                },
-//                {
-//                        "Workout Studio",
-//                        "Более специализированный зал, ориентированный на функциональный тренинг, кроссфит и персональные тренировки. В зале есть все необходимое оборудование для высокоинтенсивных тренировок.",
-//                        "ул. Тимирязева, 25, Алматы, Казахстан",
-//                        "+7 (727) 765-43-21",
-//                        "https://example-workout-studio.com"
-//                },
-//                {
-//                        "Workout Gym",
-//                        "Комплексный фитнес-центр с большим выбором тренажеров, кардио-зоной, зоной для силовых тренировок и йоги. Подходит для тренировок любой интенсивности и подготовки.",
-//                        "мкр. Самал-2, 33, Алматы, Казахстан",
-//                        "+7 (727) 987-65-43",
-//                        "https://example-workout-gym.com"
-//                },
-//                {
-//                        "Banzai Fitness Club",
-//                        "Фитнес-клуб \"Banzai\" в Алматы предлагает широкий спектр услуг, включая тренажерный зал, групповые занятия, персональные тренировки, бассейн, сауну и спа. Клуб ориентирован на высокое качество обслуживания и индивидуальный подход к каждому клиенту.",
-//                        "пр. Аль-Фараби, 77, Алматы, Казахстан",
-//                        "+7 (727) 258-36-00",
-//                        "https://example-banzai-fitness-club.com"
-//                },
-//                {
-//                        "Banzai Fitness Club (Толе би)",
-//                        "Фитнес-клуб \"Banzai\" предлагает современное оборудование для тренировок, разнообразные групповые занятия, персональные тренировки, а также дополнительные услуги, такие как сауна и массаж. Клуб ориентирован на создание комфортной и мотивирующей атмосферы для тренировок.",
-//                        "ул. Толе би, 187, Алматы, Казахстан",
-//                        "+7 (727) 233-22-33",
-//                        "https://example-banzai-fitness-club-tole-bi.com"
-//                }
-//        };
+    // Метод для вставки данных в таблицу gyms
+    private void insertGyms(SQLiteDatabase db) {
+        ContentValues values = new ContentValues();
+
+        values.put(COLUMN_GYM_NAME, "Workout Fitness Center");
+        values.put(COLUMN_GYM_DESCRIPTION, "Фитнес-центр \"Workout\" в Алматы предлагает разнообразные тренировки и программы для всех уровней подготовки. Включает залы для групповых занятий, тренажерный зал, зоны для функционального тренинга, а также сауны и массажные кабинеты.");
+        values.put(COLUMN_GYM_ADDRESS, "пр. Абая, 42, Алматы, Казахстан");
+        values.put(COLUMN_GYM_CONTACT, "+7 (727) 123-45-67");
+        values.put(COLUMN_GYM_WEBSITE, "https://example-workout-fitness-center.com");
+        db.insert(TABLE_GYMS, null, values);
+
+        values.put(COLUMN_GYM_NAME, "Workout Studio");
+        values.put(COLUMN_GYM_DESCRIPTION, "Более специализированный зал, ориентированный на функциональный тренинг, кроссфит и персональные тренировки. В зале есть все необходимое оборудование для высокоинтенсивных тренировок.");
+        values.put(COLUMN_GYM_ADDRESS, "ул. Тимирязева, 25, Алматы, Казахстан");
+        values.put(COLUMN_GYM_CONTACT, "+7 (727) 765-43-21");
+        values.put(COLUMN_GYM_WEBSITE, "https://example-workout-studio.com");
+        db.insert(TABLE_GYMS, null, values);
+
+        values.put(COLUMN_GYM_NAME, "Workout Gym");
+        values.put(COLUMN_GYM_DESCRIPTION, "Комплексный фитнес-центр с большим выбором тренажеров, кардио-зоной, зоной для силовых тренировок и йоги. Подходит для тренировок любой интенсивности и подготовки.");
+        values.put(COLUMN_GYM_ADDRESS, "мкр. Самал-2, 33, Алматы, Казахстан");
+        values.put(COLUMN_GYM_CONTACT, "+7 (727) 987-65-43");
+        values.put(COLUMN_GYM_WEBSITE, "https://example-workout-gym.com");
+        db.insert(TABLE_GYMS, null, values);
+
+        values.put(COLUMN_GYM_NAME, "Banzai Fitness Club");
+        values.put(COLUMN_GYM_DESCRIPTION, "Фитнес-клуб \"Banzai\" в Алматы предлагает широкий спектр услуг, включая тренажерный зал, групповые занятия, персональные тренировки, бассейн, сауну и спа. Клуб ориентирован на высокое качество обслуживания и индивидуальный подход к каждому клиенту.");
+        values.put(COLUMN_GYM_ADDRESS, "пр. Аль-Фараби, 77, Алматы, Казахстан");
+        values.put(COLUMN_GYM_CONTACT, "+7 (727) 258-36-00");
+        values.put(COLUMN_GYM_WEBSITE, "https://example-banzai-fitness-club.com");
+        db.insert(TABLE_GYMS, null, values);
+
+        values.put(COLUMN_GYM_NAME, "Banzai Fitness Club (Толе би)");
+        values.put(COLUMN_GYM_DESCRIPTION, "Фитнес-клуб \"Banzai\" предлагает современное оборудование для тренировок, разнообразные групповые занятия, персональные тренировки, а также дополнительные услуги, такие как сауна и массаж. Клуб ориентирован на создание комфортной и мотивирующей атмосферы для тренировок.");
+        values.put(COLUMN_GYM_ADDRESS, "ул. Толе би, 187, Алматы, Казахстан");
+        values.put(COLUMN_GYM_CONTACT, "+7 (727) 233-22-33");
+        values.put(COLUMN_GYM_WEBSITE, "https://example-banzai-fitness-club-tole-bi.com");
+        db.insert(TABLE_GYMS, null, values);
+    }
+
+//    // Метод для проверки, что таблица не пустая
+//    private boolean isTableNotEmpty(SQLiteDatabase db, String tableName) {
+//        Cursor cursor = db.rawQuery("SELECT COUNT(*) FROM " + tableName, null);
+//        boolean isNotEmpty = false;
 //
-//        // Вставка данных о спортзалах
-//        ContentValues values = new ContentValues();
-//        for (String[] gym : gyms) {
-//            values.put(COLUMN_GYM_NAME, gym[0]);
-//            values.put(COLUMN_GYM_DESCRIPTION, gym[1]);
-//            values.put(COLUMN_GYM_ADDRESS, gym[2]);
-//            values.put(COLUMN_GYM_CONTACT, gym[3]);
-//            values.put(COLUMN_GYM_WEBSITE, gym[4]);
-//            db.insert(TABLE_GYMS, null, values);
-//            values.clear();
+//        if (cursor != null) {
+//            if (cursor.moveToFirst()) {
+//                int count = cursor.getInt(0);
+//                isNotEmpty = count > 0;
+//            }
+//            cursor.close();
 //        }
+//
+//        return isNotEmpty;
 //    }
 
-
-    // скрипт спортзалов для бд
-    // INSERT INTO gyms (gym_name, gym_description, gym_address, gym_contact, gym_website) VALUES
-    //('Workout Fitness Center', 'Фитнес-центр "Workout" в Алматы предлагает разнообразные тренировки и программы для всех уровней подготовки. Включает залы для групповых занятий, тренажерный зал, зоны для функционального тренинга, а также сауны и массажные кабинеты.', 'пр. Абая, 42, Алматы, Казахстан', '+7 (727) 123-45-67', 'https://example-workout-fitness-center.com'),
-    //('Workout Studio', 'Более специализированный зал, ориентированный на функциональный тренинг, кроссфит и персональные тренировки. В зале есть все необходимое оборудование для высокоинтенсивных тренировок.', 'ул. Тимирязева, 25, Алматы, Казахстан', '+7 (727) 765-43-21', 'https://example-workout-studio.com'),
-    //('Workout Gym', 'Комплексный фитнес-центр с большим выбором тренажеров, кардио-зоной, зоной для силовых тренировок и йоги. Подходит для тренировок любой интенсивности и подготовки.', 'мкр. Самал-2, 33, Алматы, Казахстан', '+7 (727) 987-65-43', 'https://example-workout-gym.com'),
-    //('Banzai Fitness Club', 'Фитнес-клуб "Banzai" в Алматы предлагает широкий спектр услуг, включая тренажерный зал, групповые занятия, персональные тренировки, бассейн, сауну и спа. Клуб ориентирован на высокое качество обслуживания и индивидуальный подход к каждому клиенту.', 'пр. Аль-Фараби, 77, Алматы, Казахстан', '+7 (727) 258-36-00', 'https://example-banzai-fitness-club.com'),
-    //('Banzai Fitness Club на Толе би', 'Фитнес-клуб "Banzai" на Толе би предлагает современное оборудование для тренировок, разнообразные групповые занятия, персональные тренировки, а также дополнительные услуги, такие как сауна и массаж. Клуб ориентирован на создание комфортной и мотивирующей атмосферы для тренировок.', 'ул. Толе би, 187, Алматы, Казахстан', '+7 (727) 233-22-33', 'https://example-banzai-fitness-club-tole-bi.com');
 
     public void saveUserDetails(int userId, double weight, double height, int age, String activityLevel, String dietType, String goal, double recommendedCalories) {
         SQLiteDatabase db = this.getWritableDatabase();

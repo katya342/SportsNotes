@@ -73,31 +73,31 @@ public class Gym extends AppCompatActivity {
         TextView gymNameTextView = new TextView(this);
         gymNameTextView.setText("Название: " + name);
         gymNameTextView.setTextSize(18);
-        gymNameTextView.setTextColor(getResources().getColor(android.R.color.black));
+        gymNameTextView.setTextColor(getResources().getColor(android.R.color.white));
         gymsContainer.addView(gymNameTextView);
 
         TextView gymDescriptionTextView = new TextView(this);
         gymDescriptionTextView.setText("Описание: " + description);
         gymDescriptionTextView.setTextSize(16);
-        gymDescriptionTextView.setTextColor(getResources().getColor(android.R.color.black));
+        gymDescriptionTextView.setTextColor(getResources().getColor(android.R.color.white));
         gymsContainer.addView(gymDescriptionTextView);
 
         TextView gymAddressTextView = new TextView(this);
         gymAddressTextView.setText("Адрес: " + address);
         gymAddressTextView.setTextSize(16);
-        gymAddressTextView.setTextColor(getResources().getColor(android.R.color.black));
+        gymAddressTextView.setTextColor(getResources().getColor(android.R.color.white));
         gymsContainer.addView(gymAddressTextView);
 
         TextView gymContactTextView = new TextView(this);
         gymContactTextView.setText("Контакт: " + contact);
         gymContactTextView.setTextSize(16);
-        gymContactTextView.setTextColor(getResources().getColor(android.R.color.black));
+        gymContactTextView.setTextColor(getResources().getColor(android.R.color.white));
         gymsContainer.addView(gymContactTextView);
 
         TextView gymWebsiteTextView = new TextView(this);
         gymWebsiteTextView.setText("Веб-сайт: " + website);
         gymWebsiteTextView.setTextSize(16);
-        gymWebsiteTextView.setTextColor(getResources().getColor(android.R.color.black));
+        gymWebsiteTextView.setTextColor(getResources().getColor(android.R.color.white));
         gymsContainer.addView(gymWebsiteTextView);
 
         // Добавляем разделитель между записями

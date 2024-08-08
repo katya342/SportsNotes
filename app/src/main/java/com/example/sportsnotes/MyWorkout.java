@@ -52,6 +52,14 @@ public class MyWorkout extends AppCompatActivity {
         String saturdayNotes = etSaturday.getText().toString().trim();
         String sundayNotes = etSunday.getText().toString().trim();
 
+        // Проверка, что хотя бы одно поле не пустое
+        if (mondayNotes.isEmpty() && tuesdayNotes.isEmpty() && wednesdayNotes.isEmpty() &&
+                thursdayNotes.isEmpty() && fridayNotes.isEmpty() && saturdayNotes.isEmpty() &&
+                sundayNotes.isEmpty()) {
+            Toast.makeText(this, "Пожалуйста, заполните хотя бы одно поле", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         long result = dbHelper.addWorkout(userId, mondayNotes, tuesdayNotes, wednesdayNotes,
                 thursdayNotes, fridayNotes, saturdayNotes, sundayNotes);
 
@@ -64,4 +72,5 @@ public class MyWorkout extends AppCompatActivity {
             Toast.makeText(this, "Не удалось сохранить запись", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
