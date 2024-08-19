@@ -39,4 +39,5 @@ dependencies {
     androidTestImplementation(libs.espresso.core)
     implementation("com.android.volley:volley-cronet:1.2.1")
     implementation("com.github.bumptech.glide:glide:4.13.2")
+//    implementation ("com.codesgood:justifiedtextview:1.1.0")
 }

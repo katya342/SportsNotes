@@ -4,7 +4,10 @@ import android.annotation.SuppressLint;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.view.Gravity;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Space;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -36,6 +39,66 @@ public class Gym extends AppCompatActivity {
         displayGyms();
     }
 
+    private void addGymToLayout(String name, String description, String address, String contact, String website, int imageResId) {
+
+        addSpace();
+
+        // Добавляем изображение спортзала перед названием
+        ImageView gymImageView = new ImageView(this);
+        gymImageView.setImageResource(imageResId);  // Используем переданный ресурс изображения
+        LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT,
+                600 // Увеличиваем размер изображения
+        );
+        layoutParams.gravity = Gravity.CENTER;
+        layoutParams.setMargins(0, 24, 0, 24);  // Добавляем отступы сверху и снизу
+        gymImageView.setLayoutParams(layoutParams);
+        gymsContainer.addView(gymImageView);
+
+        addSpace();
+
+        TextView gymNameTextView = new TextView(this);
+        gymNameTextView.setText(name);
+        gymNameTextView.setTextSize(25);
+        gymNameTextView.setTextColor(getResources().getColor(android.R.color.white));
+        gymNameTextView.setGravity(Gravity.CENTER);
+        gymsContainer.addView(gymNameTextView);
+
+        addSpace();
+
+        TextView gymDescriptionTextView = new TextView(this);
+        gymDescriptionTextView.setText(description);
+        gymDescriptionTextView.setTextSize(20);
+        gymDescriptionTextView.setTextColor(getResources().getColor(android.R.color.white));
+        gymsContainer.addView(gymDescriptionTextView);
+
+        addSpace();
+
+        TextView gymAddressTextView = new TextView(this);
+        gymAddressTextView.setText("Адрес: " + address);
+        gymAddressTextView.setTextSize(18);
+        gymAddressTextView.setTextColor(getResources().getColor(android.R.color.white));
+        gymsContainer.addView(gymAddressTextView);
+
+        addSpace();
+
+        TextView gymContactTextView = new TextView(this);
+        gymContactTextView.setText("Контакт: " + contact);
+        gymContactTextView.setTextSize(18);
+        gymContactTextView.setTextColor(getResources().getColor(android.R.color.white));
+        gymsContainer.addView(gymContactTextView);
+
+        addSpace();
+
+        TextView gymWebsiteTextView = new TextView(this);
+        gymWebsiteTextView.setText("Веб-сайт: " + website);
+        gymWebsiteTextView.setTextSize(18);
+        gymWebsiteTextView.setTextColor(getResources().getColor(android.R.color.white));
+        gymsContainer.addView(gymWebsiteTextView);
+
+        addSpace();
+    }
+
     private void displayGyms() {
         SQLiteDatabase db = dbHelper.getReadableDatabase();
         String[] projection = {
@@ -56,6 +119,15 @@ public class Gym extends AppCompatActivity {
                 null
         );
 
+        int[] imageResources = {
+                R.drawable.images1,
+                R.drawable.images2,
+                R.drawable.images3,
+                R.drawable.images4,
+                R.drawable.images5,
+        };
+
+        int i = 0;
         while (cursor.moveToNext()) {
             String gymName = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_GYM_NAME));
             String gymDescription = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_GYM_DESCRIPTION));
@@ -63,48 +135,19 @@ public class Gym extends AppCompatActivity {
             String gymContact = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_GYM_CONTACT));
             String gymWebsite = cursor.getString(cursor.getColumnIndexOrThrow(Database.COLUMN_GYM_WEBSITE));
 
-            addGymToLayout(gymName, gymDescription, gymAddress, gymContact, gymWebsite);
+            // Передаем соответствующее изображение для каждого спортзала
+            addGymToLayout(gymName, gymDescription, gymAddress, gymContact, gymWebsite, imageResources[i % imageResources.length]);
+            i++;
         }
 
         cursor.close();
     }
 
-    private void addGymToLayout(String name, String description, String address, String contact, String website) {
-        TextView gymNameTextView = new TextView(this);
-        gymNameTextView.setText("Название: " + name);
-        gymNameTextView.setTextSize(18);
-        gymNameTextView.setTextColor(getResources().getColor(android.R.color.white));
-        gymsContainer.addView(gymNameTextView);
-
-        TextView gymDescriptionTextView = new TextView(this);
-        gymDescriptionTextView.setText("Описание: " + description);
-        gymDescriptionTextView.setTextSize(16);
-        gymDescriptionTextView.setTextColor(getResources().getColor(android.R.color.white));
-        gymsContainer.addView(gymDescriptionTextView);
-
-        TextView gymAddressTextView = new TextView(this);
-        gymAddressTextView.setText("Адрес: " + address);
-        gymAddressTextView.setTextSize(16);
-        gymAddressTextView.setTextColor(getResources().getColor(android.R.color.white));
-        gymsContainer.addView(gymAddressTextView);
-
-        TextView gymContactTextView = new TextView(this);
-        gymContactTextView.setText("Контакт: " + contact);
-        gymContactTextView.setTextSize(16);
-        gymContactTextView.setTextColor(getResources().getColor(android.R.color.white));
-        gymsContainer.addView(gymContactTextView);
-
-        TextView gymWebsiteTextView = new TextView(this);
-        gymWebsiteTextView.setText("Веб-сайт: " + website);
-        gymWebsiteTextView.setTextSize(16);
-        gymWebsiteTextView.setTextColor(getResources().getColor(android.R.color.white));
-        gymsContainer.addView(gymWebsiteTextView);
-
-        // Добавляем разделитель между записями
-        TextView separator = new TextView(this);
-        separator.setText("------------------------------");
-        separator.setTextSize(16);
-        separator.setTextColor(getResources().getColor(android.R.color.black));
-        gymsContainer.addView(separator);
+    private void addSpace() {
+        Space space = new Space(this);
+        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
+                LinearLayout.LayoutParams.MATCH_PARENT, 16);
+        space.setLayoutParams(params);
+        gymsContainer.addView(space);
     }
 }
