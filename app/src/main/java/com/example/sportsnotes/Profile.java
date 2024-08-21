@@ -96,7 +96,7 @@ public class Profile extends AppCompatActivity {
             if (trainingCount == 0 || trainingTime == 0 || breakfastCalories == 0 ||
                     lunchCalories == 0 || dinnerCalories == 0 || weight == 0 || date.isEmpty()) {
                 // Если хотя бы одно поле пустое, вывести сообщение
-                Toast.makeText(this, "Пожалуйста, заполните все данные", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
                 return; // Прекратить выполнение метода
             }
 
