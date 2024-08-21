@@ -9,28 +9,28 @@
         android:id="@+id/etUserId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="User ID"
+        android:hint="Пользователь (ID)"
         android:inputType="number" />
 
     <EditText
         android:id="@+id/etWeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Weight (kg)"
+        android:hint="Вес (kg)"
         android:inputType="numberDecimal" />
-
+1
     <EditText
         android:id="@+id/etHeight"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Height (cm)"
+        android:hint="Рост (cm)"
         android:inputType="numberDecimal" />
 
     <EditText
         android:id="@+id/etAge"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Age"
+        android:hint="Возраст"
         android:inputType="number" />
 
     <Spinner

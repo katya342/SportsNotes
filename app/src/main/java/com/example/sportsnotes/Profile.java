@@ -1,7 +1,6 @@
 package com.example.sportsnotes;
 
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -9,7 +8,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
@@ -85,17 +83,32 @@ public class Profile extends AppCompatActivity {
     }
 
     private void saveProfileData() {
-        int trainingCount = Integer.parseInt(editTextTrainingCount.getText().toString());
-        double trainingTime = Double.parseDouble(editTextTrainingTime.getText().toString());
-        double breakfastCalories = Double.parseDouble(editTextBreakfastCalories.getText().toString());
-        double lunchCalories = Double.parseDouble(editTextLunchCalories.getText().toString());
-        double dinnerCalories = Double.parseDouble(editTextDinnerCalories.getText().toString());
-        double weights = Double.parseDouble(editTextWeight.getText().toString());
-        String date = editTextDate.getText().toString();
+        try {
+            int trainingCount = Integer.parseInt(editTextTrainingCount.getText().toString());
+            double trainingTime = Double.parseDouble(editTextTrainingTime.getText().toString());
+            double breakfastCalories = Double.parseDouble(editTextBreakfastCalories.getText().toString());
+            double lunchCalories = Double.parseDouble(editTextLunchCalories.getText().toString());
+            double dinnerCalories = Double.parseDouble(editTextDinnerCalories.getText().toString());
+            double weight = Double.parseDouble(editTextWeight.getText().toString());
+            String date = editTextDate.getText().toString();
 
-        // Вставить данные в базу данных без изображения
-        db.insertUserProfile(trainingCount, trainingTime, breakfastCalories, lunchCalories, dinnerCalories, weights, date);
+            // Проверка, что все поля заполнены
+            if (trainingCount == 0 || trainingTime == 0 || breakfastCalories == 0 ||
+                    lunchCalories == 0 || dinnerCalories == 0 || weight == 0 || date.isEmpty()) {
+                // Если хотя бы одно поле пустое, вывести сообщение
+                Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+                return; // Прекратить выполнение метода
+            }
 
-        Toast.makeText(this, "Данные сохранены", Toast.LENGTH_SHORT).show();
+            // Вставить данные в базу данных без изображения
+            db.insertUserProfile(trainingCount, trainingTime, breakfastCalories, lunchCalories, dinnerCalories, weight, date);
+
+            Toast.makeText(this, "Данные сохранены", Toast.LENGTH_SHORT).show();
+
+        } catch (NumberFormatException e) {
+            // Обработка исключения, если введены некорректные данные
+            Toast.makeText(this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+        }
     }
+
 }

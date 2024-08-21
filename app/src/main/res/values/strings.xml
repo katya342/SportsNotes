@@ -9,19 +9,19 @@
         <item>Велоспорт</item>
     </string-array>
     <string-array name="activity_level_array">
-        <item>Low</item>
-        <item>Medium</item>
-        <item>High</item>
+        <item>Низкий</item>
+        <item>Средний</item>
+        <item>Высокий</item>
     </string-array>
     <string-array name="diet_type_array">
-        <item>Vegetarian</item>
-        <item>Vegan</item>
-        <item>Keto</item>
+        <item>Вегетарианец</item>
+        <item>Веган</item>
+        <item>Кето</item>
     </string-array>
     <string-array name="goal_array">
-        <item>Weight Loss</item>
-        <item>Muscle Gain</item>
-        <item>Maintenance</item>
+        <item>Потеря веса</item>
+        <item>Увеличение мышечной массы</item>
+        <item>Поддержка</item>
     </string-array>
 
 </resources>
