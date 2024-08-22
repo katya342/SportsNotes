@@ -50,7 +50,7 @@ public class Registration extends AppCompatActivity {
                         Toast.makeText(Registration.this, "Ошибка при регистрации", Toast.LENGTH_SHORT).show();
                     }
                 } else {
-                    Toast.makeText(Registration.this, "Пожалуйста, заполните все поля", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(Registration.this, "Пожалуйста, заполните все данные", Toast.LENGTH_SHORT).show();
                 }
             }
         });
